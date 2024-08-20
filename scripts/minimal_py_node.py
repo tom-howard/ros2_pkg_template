@@ -2,7 +2,6 @@
 # minimal Python node courtesy of Robotics Backend:
 # https://roboticsbackend.com/write-minimal-ros2-python-node/
 
-
 import rclpy
 from rclpy.node import Node
 
