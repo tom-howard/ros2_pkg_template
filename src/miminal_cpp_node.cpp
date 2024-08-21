@@ -2,7 +2,6 @@
 https://roboticsbackend.com/write-minimal-ros2-cpp-node/
 
 #include "rclcpp/rclcpp.hpp"
-#include "ros2_pkg_template/minimal_cpp_header.hpp"
 
 int main(int argc, char **argv)
 {
