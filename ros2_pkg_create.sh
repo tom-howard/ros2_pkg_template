@@ -46,7 +46,7 @@ fi
 
 PKG_PATH="$ROS2_WS/$PKG_NAME"
 
-if [ -d "$PKG_PATH"]; then
+if [ -d "$PKG_PATH" ]; then
     echo "[WARNING] The '$PKG_NAME' ROS package (or a directory of the same name) already exists!"
     if ask "Do you want to replace it?"; then
         echo "Removing the existing directory:"
