@@ -1,9 +1,8 @@
 #! /usr/bin/env bash
 
 ask() {
-    local reply prompt
-    prompt='y/n'
-    echo -e -n "[INPUT] $1 [$prompt] >> "
+    local reply
+    echo -e -n "[INPUT] $1 [y/n] >> "
     read -r reply </dev/tty
     if [[ -z $reply ]]; then
         return 1;
@@ -36,7 +35,7 @@ if [ -z "$ROS2_WS" ]; then
     exit 0    
 fi
 
-echo -n "[INPUT] Please enter a name for your package >>> "
+echo -n "[INPUT] Please enter a name for your package >> "
 read -r PKG_NAME </dev/tty
 
 if [ -z "$PKG_NAME" ]; then
@@ -49,8 +48,7 @@ PKG_PATH="$ROS2_WS/$PKG_NAME"
 if [ -d "$PKG_PATH" ]; then
     echo "[WARNING] The '$PKG_NAME' ROS package (or a directory of the same name) already exists!"
     if ask "Do you want to replace it?"; then
-        echo "Removing the existing directory:"
-        echo "  $PKG_PATH"
+        echo "Removing the existing directory..."
         rm -rf $PKG_PATH
     else
         echo "[EXITING] Start again with a new package name, or remove the existing one."
