@@ -14,13 +14,6 @@ ask() {
     fi
 }
 
-# PKG_NAME=$1
-
-# git clone --quiet https://github.com/tom-howard/ros2_pkg_template.git $PKG_NAME
-
-# cd $PKG_NAME 
-# rm -rf .git
-
 if [ -z "$COLCON_PREFIX_PATH" ]; then
     echo "[EXITING] No ROS2 Workspaces detected."
     exit 0
@@ -68,3 +61,12 @@ fi
 echo "Creating the '$PKG_NAME' package at:"
 echo "  $PKG_PATH"
 
+ORG_PKG_NAME=ros2_pkg_template
+git clone --quiet https://github.com/tom-howard/$ORG_PKG_NAME.git $PKG_PATH
+
+cd $PKG_PATH 
+rm -rf .git
+mv $ORG_PKG_NAME/ $PKG_NAME/
+mv include/$ORG_PKG_NAME/ include/$PKG_NAME/
+sed -i '/<name>/s/'$ORG_PKG_NAME'/'$PKG_NAME'/' package.xml
+sed -i '2 s/'$ORG_PKG_NAME'/'$PKG_NAME'/' CMakeLists.txt
