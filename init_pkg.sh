@@ -32,7 +32,7 @@ echo "Initialising the '${PKG_NAME}' package..."
 
 TEMPLATE_NAME=ros2_pkg_template
 cd ${PKG_PATH}
-mv ${TEMPLATE_NAME}/ ${PKG_NAME}/
+mv ${TEMPLATE_NAME}_modules/ ${PKG_NAME}_modules/
 mv include/${TEMPLATE_NAME}/ include/${PKG_NAME}/
 sed -i '/<name>/s/'${TEMPLATE_NAME}'/'${PKG_NAME}'/' package.xml
 sed -i '2 s/'${TEMPLATE_NAME}'/'${PKG_NAME}'/' CMakeLists.txt
