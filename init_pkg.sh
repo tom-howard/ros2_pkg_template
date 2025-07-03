@@ -38,6 +38,11 @@ GIT_REMOTE_URL=$(git config --get remote.origin.url)
 if [[ "${GIT_REMOTE_URL}" == "https://github.com/tom-howard/ros2_pkg_template.git" ]]; then
     dbg "this is a clone of the package template"
     PKG_NAME=$1
+    if [[ -z "${PKG_NAME}" ]]; then
+        dbg "No package name provided."
+        echo -n "[INPUT] Please enter a name for your package >> "
+        read -r ${PKG_NAME} </dev/tty
+    fi
     FROM_TEMPLATE=True
 else
     dbg "this is not the package template, preserve git, get repo name (or an alternative that is provided)."
