@@ -14,8 +14,8 @@ ask() {
     fi
 }
 
+DEBUG=$2
 dbg() {
-    DEBUG=1 # Set DEBUG= to dissable debug messages
     if [[ -n "${DEBUG}" ]]; then
         echo "[DBG] $1"
     fi
