@@ -40,7 +40,8 @@ if [[ "${GIT_REMOTE_URL}" == "https://github.com/tom-howard/ros2_pkg_template.gi
     if [[ -z "$1" ]]; then
         dbg "No package name provided."
         echo -n "[INPUT] Please enter a name for your package >> "
-        read -r ${PKG_NAME} </dev/tty
+        read -r PKG_NAME </dev/tty
+        dbg "Using provided package name (after input): ${PKG_NAME}"
     else
         PKG_NAME="$1"
         dbg "Using provided package name: ${PKG_NAME}"
@@ -50,11 +51,6 @@ else
     dbg "this is not the package template, preserve git, get repo name (or an alternative that is provided)."
     if [[ -n "$1" ]]; then
         PKG_NAME="$1"
-        if [[ -z "${PKG_NAME}" ]]; then
-            dbg "Package name wasn't provided."
-            echo -n "[INPUT] Please enter a name for your package >> "
-            read -r ${PKG_NAME} </dev/tty
-        fi
         dbg "Using provided package name: ${PKG_NAME}"
     else
         dbg "Determining the package name from the git remote URL."
