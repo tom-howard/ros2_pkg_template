@@ -40,17 +40,20 @@ if [[ "${GIT_REMOTE_URL}" == "https://github.com/tom-howard/ros2_pkg_template.gi
     PKG_NAME=$1
     FROM_TEMPLATE=True
 else
-    dbg "this is not the package template, preserve git."
-    PKG_NAME=$(basename "${GIT_REMOTE_URL}" ".git")
+    dbg "this is not the package template, preserve git, get repo name (or an alternative that is provided)."
+    if [[ -n "$1" ]]; then
+        PKG_NAME="$1"
+        if [[ -z "${PKG_NAME}" ]]; then
+            dbg "Package name wasn't provided."
+            echo -n "[INPUT] Please enter a name for your package >> "
+            read -r ${PKG_NAME} </dev/tty
+        fi
+        dbg "Using provided package name: ${PKG_NAME}"
+    else
+        dbg "Determining the package name from the git remote URL."
+        PKG_NAME=$(basename "${GIT_REMOTE_URL}" ".git")
+    fi
     FROM_TEMPLATE=False
-fi
-
-dbg "Package name: ${PKG_NAME}"
-
-if [[ -z "${PKG_NAME}" ]]; then
-    dbg "Package name is empty."
-    echo -n "[INPUT] Please enter a name for your package >> "
-    read -r ${PKG_NAME} </dev/tty
 fi
 
 dbg "Package name: ${PKG_NAME}"
@@ -59,34 +62,36 @@ if [[ ! "${PKG_NAME}" =~ ^[a-z][a-z0-9_]*$ ]]; then
     echo "[ERROR] Invalid package name: '${PKG_NAME}'."
     echo "Package names must start with a lowercase letter, and can only contain lowercase letters, numbers, and underscores."
     exit 255
+elif [[ "${PKG_NAME}" == "ros2_pkg_template" ]]; then
+    echo "[ERROR] Package name cannot be 'ros2_pkg_template'. Please choose something different."
+    exit 255
 else
     dbg "Package name OK"
 fi
 
-if [ -z "$COLCON_PREFIX_PATH" ]; then
-    echo "[EXITING] No ROS2 Workspaces detected."
-    exit 0
+PKG_IS_IN_A_WS=False
+if [[ -z "${COLCON_PREFIX_PATH}" ]]; then
+    dbg "No ROS 2 Workspace(s) detected."
+else
+    dbg "ROS 2 Workspace(s) detected: ${COLCON_PREFIX_PATH}"
+    IFS=':' read -r -a COLCON_WS <<< "$COLCON_PREFIX_PATH"
+    for ws in "${COLCON_WS[@]}"; do
+        if [[ "${PKG_PATH}" == "$(dirname "${ws}")/src"* ]]; then
+            PKG_IS_IN_A_WS=True
+            dbg "PKG_PATH is inside workspace: $(dirname "${ws}")/src"
+            break
+        fi
+    done
 fi
 
-IFS=':' read -r -a COLCON_WS <<< "$COLCON_PREFIX_PATH"
-
-PKG_PATH_IN_WS=false
-for ws in "${COLCON_WS[@]}"; do
-    if [[ "${PKG_PATH}" == "$(dirname "${ws}")/src"* ]]; then
-        PKG_PATH_IN_WS=true
-        dbg "PKG_PATH is inside workspace: $(dirname "${ws}")/src"
-        break
-    fi
-done
-
-if [[ "${PKG_PATH_IN_WS}" == "true" ]]; then
-    dbg "PKG_PATH is inside a ROS2 workspace."
+if [[ "${PKG_IS_IN_A_WS}" == "True" ]]; then
+    dbg "PKG_PATH is inside a ROS 2 workspace."
 else
-    if ! ask "This package doesn't appear to be inside a ROS2 workspace. Are you sure you want to continue?"; then
+    if ! ask "This package doesn't appear to be inside a ROS 2 workspace. Are you sure you want to continue?"; then
         dbg "Not in a WS, don't continue."
         exit 255
     fi
-    dbg "PKG_PATH is NOT inside any ROS2 workspace, proceeding anyway."
+    dbg "PKG_PATH is NOT inside any ROS 2 workspace, proceeding anyway."
 fi
 
 if ! ask "Initialise this ROS package with the name '${PKG_NAME}'?"; then
@@ -97,11 +102,11 @@ fi
 echo "Initialising the '${PKG_NAME}' package..."
 
 if [[ "${FROM_TEMPLATE}" == "True" ]]; then
-    dbg "Renaming package location to '${PKG_NAME}'"
     NEW_PKG_PATH="$(dirname "${PKG_PATH}")/${PKG_NAME}"
+    dbg "Renaming package directory from '${PKG_PATH}'"
     dbg "New package location: ${NEW_PKG_PATH}"
     if [ -d "${NEW_PKG_PATH}" ]; then
-        echo "[ERROR] The '${PKG_NAME}' ROS package (or a directory of the same name) already exists!"
+        echo "[ERROR] The '${PKG_NAME}' ROS package (or a directory of the same name) already exists at '${NEW_PKG_PATH}'!"
         exit 255
     fi
 fi
