@@ -21,7 +21,7 @@ ament_python_install_package(${PROJECT_NAME}_modules)
 
 # Install Python executables
 install(PROGRAMS
-  src/minimal_node.py
+  scripts/minimal_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
