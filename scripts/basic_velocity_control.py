@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import rclpy
-from rclpy.node import Node
 from geometry_msgs.msg import TwistStamped
 import time
 
@@ -9,7 +8,7 @@ state = 1
 change_state = True
   
 rclpy.init(args=None)
-node = Node("square")
+node = rclpy.create_node("basic_velocity_control")
 
 vel_pub = node.create_publisher(TwistStamped, "cmd_vel", 10)
 vel = TwistStamped()
