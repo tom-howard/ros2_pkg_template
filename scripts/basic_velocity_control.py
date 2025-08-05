@@ -5,12 +5,12 @@ from geometry_msgs.msg import TwistStamped
 import time
 
 state = 1
-  
+vel = TwistStamped()
+
 rclpy.init(args=None)
 node = rclpy.create_node("basic_velocity_control")
-
 vel_pub = node.create_publisher(TwistStamped, "cmd_vel", 10)
-vel = TwistStamped()
+
 timestamp = node.get_clock().now().nanoseconds
 
 while rclpy.ok():
