@@ -21,7 +21,7 @@ ament_python_install_package(${PROJECT_NAME}_modules)
 
 # Install Python executables
 install(PROGRAMS
-  scripts/minimal_node.py
+  scripts/basic_velocity_control.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
