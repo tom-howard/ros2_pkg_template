@@ -118,7 +118,6 @@ rm -f init_pkg.sh
 
 TEMPLATE_NAME=ros2_pkg_template
 mv ${TEMPLATE_NAME}_modules/ ${PKG_NAME}_modules/
-# mv include/${TEMPLATE_NAME}/ include/${PKG_NAME}/
 sed -i '/<name>/s/'${TEMPLATE_NAME}'/'${PKG_NAME}'/' package.xml
 sed -i '2 s/'${TEMPLATE_NAME}'/'${PKG_NAME}'/' CMakeLists.txt
 
