@@ -3,8 +3,12 @@
 <package format="3">
   <name>ros2_pkg_template</name>
   <version>0.0.0</version>
+  
   <description>TODO: Package description</description>
-  <maintainer email="your.name@sheffield.ac.uk">Name</maintainer>
+  
+  <maintainer email="your.name.1@sheffield.ac.uk">Name 1</maintainer>
+  <maintainer email="your.name.2@sheffield.ac.uk">Name 2</maintainer>
+
   <license>TODO: License declaration</license>
 
   <exec_depend>rclpy</exec_depend>
@@ -20,4 +24,5 @@
   <export>
     <build_type>ament_cmake</build_type>
   </export>
+
 </package>
