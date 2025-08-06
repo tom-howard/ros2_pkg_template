@@ -3,7 +3,7 @@
 import rclpy
 from rclpy.node import Node
 from rclpy.task import Future
-from geometry_msgs.msg import Twist 
+from geometry_msgs.msg import TwistStamped 
 
 import time
 
@@ -13,7 +13,7 @@ class Stop(Node):
         super().__init__("stop_me")
 
         self.vel_pub = self.create_publisher(
-            msg_type=Twist,
+            msg_type=TwistStamped,
             topic="cmd_vel",
             qos_profile=10,
         )
@@ -23,7 +23,7 @@ class Stop(Node):
 
     def shutdown(self):
         for i in range(5):
-            self.vel_pub.publish(Twist())
+            self.vel_pub.publish(TwistStamped())
             time.sleep(0.1)
         self.stopped.set_result('stopped')
 
