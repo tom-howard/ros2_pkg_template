@@ -109,8 +109,14 @@ if [[ "${FROM_TEMPLATE}" == "True" ]]; then
     dbg "Renaming package directory from '${PKG_PATH}'"
     dbg "New package location: ${NEW_PKG_PATH}"
     if [ -d "${NEW_PKG_PATH}" ]; then
-        echo "[ERROR] The '${PKG_NAME}' ROS package (or a directory of the same name) already exists at '${NEW_PKG_PATH}'!"
-        exit 255
+        echo "[WARNING] The '${PKG_NAME}' ROS package (or a directory of the same name) already exists at '${NEW_PKG_PATH}'!"
+        if ask "Do you want to overwrite it?"; then
+            dbg "Removing ${NEW_PKG_PATH}..."
+            rm -rf "${NEW_PKG_PATH}"
+        else
+            echo "Exiting."
+            exit 255
+        fi
     fi
 fi
 
